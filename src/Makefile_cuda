@@ -1,0 +1,30 @@
+#Makefile
+PROG = libooc_cuda.so
+
+SRCS = ooc_cuda.cpp 
+
+OBJS = ${SRCS:%.cpp=%.o}
+DEPS = ${SRCS:%.cpp=%.d}
+
+CC = g++ 
+CFLAGS = -lcudart -lcudnn -lcublas -O3 -fPIC
+CFLAGS += -Wno-pointer-arith
+RM = rm
+
+#
+all : ${PROG}
+
+-include $(DEPS)
+
+${PROG} : ${OBJS}
+	${CC} -shared -o $@ $^ ${CFLAGS} 
+
+%.o: %.cpp
+	${CC} -c -MMD -MP $< ${CFLAGS} 
+
+
+#
+.PHONY : clean
+clean :
+	${RM} -f ${PROG} ${OBJS} ${DEPS} *.o *~
+

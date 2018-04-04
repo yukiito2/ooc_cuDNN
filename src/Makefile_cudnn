@@ -1,0 +1,49 @@
+#Makefile
+PROG = libooc_cudnn.so
+
+SRCS = ooc_cudnn.cpp ooc_cudnnTensor.cpp ooc_cudnnFilter.cpp
+SRCS += ooc_cudnnConvolutionForward.cpp ooc_cudnnConvolutionForward_optimize.cpp
+SRCS += ooc_cudnnAddTensor.cpp ooc_cudnnAddTensor_optimize.cpp
+SRCS += ooc_cudnnActivationForward.cpp ooc_cudnnActivationForward_optimize.cpp 
+SRCS += ooc_cudnnActivationBackward.cpp ooc_cudnnActivationBackward_optimize.cpp 
+SRCS += ooc_cudnnConvolutionBiasActivationForward.cpp ooc_cudnnConvolutionBiasActivationForward_optimize.cpp 
+SRCS += ooc_cudnnConvolutionBackwardData.cpp ooc_cudnnConvolutionBackwardData_optimize.cpp
+SRCS += ooc_cudnnDeconvolutionBiasActivationForward.cpp ooc_cudnnDeconvolutionBiasActivationForward_optimize.cpp
+SRCS += ooc_cudnnConvolutionBackwardFilter.cpp ooc_cudnnConvolutionBackwardFilter_optimize.cpp
+SRCS += ooc_cudnnConvolutionBackwardBias.cpp ooc_cudnnConvolutionBackwardBias_optimize.cpp
+SRCS += ooc_cudnnConvolutionBackwardDataFilterBias.cpp ooc_cudnnConvolutionBackwardDataFilterBias_optimize.cpp
+SRCS += ooc_cudnnActivationConvolutionBackwardDataFilterBias.cpp ooc_cudnnActivationConvolutionBackwardDataFilterBias_optimize.cpp
+SRCS += ooc_cudnnPoolingForward.cpp ooc_cudnnPoolingForward_optimize.cpp
+SRCS += ooc_cudnnPoolingBackward.cpp ooc_cudnnPoolingBackward_optimize.cpp
+SRCS += ooc_cudnnConvolutionBiasActivationPoolingForward.cpp ooc_cudnnConvolutionBiasActivationPoolingForward_optimize.cpp
+SRCS += ooc_cudnnPoolingActivationConvolutionBackwardDataFilterBias.cpp ooc_cudnnPoolingActivationConvolutionBackwardDataFilterBias_optimize.cpp
+SRCS += ooc_cudnnSoftmaxForward.cpp ooc_cudnnSoftmaxForward_optimize.cpp
+SRCS += ooc_cudnnSoftmaxBackward.cpp ooc_cudnnSoftmaxBackward_optimize.cpp
+SRCS += ooc_cublasSgemm.cpp ooc_cublasSgemm_optimize.cpp
+
+OBJS = ${SRCS:%.cpp=%.o}
+DEPS = ${SRCS:%.cpp=%.d}
+
+
+CC = g++ 
+CFLAGS = -lcudart -lcudnn -lcublas -O3 -fPIC
+CFLAGS += -Wno-pointer-arith
+RM = rm
+
+#
+all : ${PROG}
+
+-include $(DEPS)
+
+${PROG} : ${OBJS}
+	${CC} -shared -o $@ $^ ${CFLAGS} 
+
+%.o: %.cpp
+	${CC} -c -MMD -MP $< ${CFLAGS} 
+
+
+#
+.PHONY : clean
+clean :
+	${RM} -f ${PROG} ${OBJS} ${DEPS} *.o *~
+

@@ -1,0 +1,32 @@
+#Makefile
+PROG = libooc_cublas.so
+
+SRCS = ooc_cudnn.cpp ooc_cudnnTensor.cpp ooc_cudnnFilter.cpp
+SRCS += ooc_cublasSgemm.cpp ooc_cublasSgemm_optimize.cpp
+
+OBJS = ${SRCS:%.cpp=%.o}
+DEPS = ${SRCS:%.cpp=%.d}
+
+
+CC = g++ 
+CFLAGS = -lcudart -lcudnn -lcublas -O3 -fPIC
+CFLAGS += -Wno-pointer-arith
+RM = rm
+
+#
+all : ${PROG}
+
+-include $(DEPS)
+
+${PROG} : ${OBJS}
+	${CC} -shared -o $@ $^ ${CFLAGS} 
+
+%.o: %.cpp
+	${CC} -c -MMD -MP $< ${CFLAGS} 
+
+
+#
+.PHONY : clean
+clean :
+	${RM} -f ${PROG} ${OBJS} ${DEPS} *.o *~
+
