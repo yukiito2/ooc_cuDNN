@@ -66,10 +66,6 @@ ooc_cudnnConvolutionBiasActivationForward(...);
 + Current ooc_cuDNN only supports "float" data-type and "NCHW" data-format. 
 + Using CUDA kernels other than ooc_cuDNN may cause errors, since ooc_cudaMalloc() allocate some data to host-memory instead of device-memory.
 
-## Licence
-
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
-
 ## References
 
 + Yuki Ito, Ryo Matsumiya, and Toshio Endo. ooc_cuDNN: Accommodating Convolutional Neural Networks over GPU Memory Capacity. In Proceedings of 2017 IEEE International Conference on Big Data (IEEE BigData 2017), Boston, December 2017.
@@ -82,4 +78,4 @@ This work is supported by JST-CREST, “Software Technology that Deals with Deep
 
 [yukiito](https://github.com/yukiito2)
 
-Copyright (C) 2017-2018, Yuki Ito. All Rights Reserved.
+Copyright (C) 2017, Yuki Ito. All Rights Reserved.
